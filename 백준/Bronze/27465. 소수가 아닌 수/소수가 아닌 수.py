@@ -1,12 +1,13 @@
-def is_prime(n):
-    if(n == 1):
+import sys
+input = sys.stdin.readline
+
+"""def is_prime(n):
+    if n == 1:
         return False
     for i in range(2, n):
-        if(n % i == 0):
+        if n % i == 0:
             return False
-    return True
+    return True"""
 
 n = int(input())
-while is_prime(n):
-    n += 1
-print(n)
+print(10**9)
