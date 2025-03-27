@@ -1,6 +1,5 @@
 import sys
 input = sys.stdin.readline
-from collections import deque
 
 s = input().strip()
 b = input().strip()
@@ -18,7 +17,6 @@ for c in s:
         
     else:
         bomb.append(c)
-        #print(bomb[-len(b):])
         if ''.join(bomb[-len(b):]) == b:
             for _ in range(len(b)):
                 bomb.pop()
