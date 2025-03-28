@@ -1,32 +1,34 @@
 import sys
-import heapq
 input = sys.stdin.readline
 sys.setrecursionlimit(10**6)
 
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])
+    return parent[x]
+
+def union(x, y):
+    x_root = find(x)
+    y_root = find(y)
+    if x_root != y_root:
+        parent[y_root] = x_root
+        return True
+    return False
+
 v, e = map(int, input().split())
-adj = [[] for _ in range(v+1)]
+edges = []
 
 for _ in range(e):
     a, b, c = map(int, input().split())
-    adj[a].append((c, b))
-    adj[b].append((c, a))
+    edges.append((c, a, b))
 
-# Prim 알고리즘
-visited = [False] * (v+1)
-min_heap = [(0, 1)]  # (가중치, 정점)
+edges.sort()
+
+parent = [i for i in range(v+1)]
+
 answer = 0
+for c, a, b in edges:
+    if union(a, b):
+        answer += c
 
-while min_heap:
-    c, i = heapq.heappop(min_heap)
-    
-    if visited[i]:
-        continue
-    
-    visited[i] = True
-    answer += c
-    
-    for nc, j in adj[i]:
-        if not visited[j]:
-            heapq.heappush(min_heap, (nc, j))
-            
 print(answer)
