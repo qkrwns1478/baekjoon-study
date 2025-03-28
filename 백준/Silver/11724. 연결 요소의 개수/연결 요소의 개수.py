@@ -3,10 +3,10 @@ input = sys.stdin.readline
 sys.setrecursionlimit(10**6)
 
 def dfs(i):
-    if i in visited:
+    if visited[i]:
         return
 
-    visited.add(i)
+    visited[i] = True
     for j in adj[i]:
         dfs(j)
 
@@ -22,13 +22,10 @@ for _ in range(m):
     adj[u].sort()
     adj[v].sort()
 
-#for i in range(1, n+1):
-#    print(f"{i} : {adj[i]}")
-
 answer = 0
-visited = set()
+visited = [False] * (n+1)
 for i in range(1, n+1):
-    if i not in visited:
+    if not visited[i]:
         dfs(i)
         answer += 1
 
