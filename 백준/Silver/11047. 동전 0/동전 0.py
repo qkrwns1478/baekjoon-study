@@ -1,14 +1,12 @@
 n, k = map(int, input().split())
-arr = list()
-for _ in range(n):
-    coin = int(input())
-    if coin <= k:
-        arr.append(coin)
-n = len(arr)
+arr = [0] * n
+for i in range(n):
+    arr[i] = int(input())
 
 answer = 0
-while k > 0:
-    tmp = arr.pop()
-    answer += k // tmp
-    k -= (k // tmp) * tmp
+for i in range(n-1, -1, -1):
+    if arr[i] <= k:
+        answer += k // arr[i]
+        k %= arr[i]
+
 print(answer)
