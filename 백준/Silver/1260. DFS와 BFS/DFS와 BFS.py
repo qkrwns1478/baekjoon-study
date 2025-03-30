@@ -3,50 +3,44 @@ input = sys.stdin.readline
 from collections import deque
 sys.setrecursionlimit(10**6)
 
+n, m, v = map(int, input().split())
+adj = [[] for _ in range(n+1)]
+
+for _ in range(m):
+    s, e = map(int, input().split())
+    adj[s].append(e)
+    adj[e].append(s)
+
+for i in range(n+1):
+    adj[i].sort()
+
 def dfs(i):
-    if i not in visited:
-        visited.add(i)
-        result_dfs.append(i)
-        for j in adj[i]:
+    result.append(i)
+    visited[i] = True
+    
+    for j in adj[i]:
+        if not visited[j]:
             dfs(j)
 
-def bfs(i):
-    queue = deque([i])
-    visited = set()
-    visited.add(i)
-    result = list()
+visited = [False] * (n+1)
+result = list()
+dfs(v)
+print(*result)
 
+def bfs(i):
+    queue = deque()
+    queue.append(i)
+    visited[i] = True
     while queue:
-        node = queue.popleft()
-        result.append(node)
-        for j in adj[node]:
-            if j not in visited:
-                visited.add(j)
+        now = queue.popleft()
+        result.append(now)
+        
+        for j in adj[now]:
+            if not visited[j]:
+                visited[j] = True
                 queue.append(j)
 
-    print(*result)
-    del result
-        
-
-n, m, v = map(int, input().split())
-adj = dict()
-for i in range(1, n+1):
-    adj[i] = list()
-    
-for _ in range(m):
-    a, b = map(int, input().split())
-    adj[a].append(b)
-    adj[b].append(a)
-    adj[a].sort()
-    adj[b].sort()
-
-#for i in range(1, n+1):
-#    print(f"{i} : {adj[i]}")
-
-visited = set()
-result_dfs = list()
-dfs(v)
-print(*result_dfs)
-del result_dfs
-
+visited = [False] * (n+1)
+result.clear()
 bfs(v)
+print(*result)
