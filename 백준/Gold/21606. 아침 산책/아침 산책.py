@@ -1,49 +1,39 @@
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(10**6)
-
-def dfs(i):
-    global answer
-    
-    if visited[i]:
-        return
-
-    visited[i] = True
-    for j in adj[i][0]:
-        if not visited[j]:
-            if adj[j][1] == 0:
-                #print(f"{i} -> {j}")
-                dfs(j)
-            else:
-                #print(f"{j}에서 종료")
-                answer += 1
+sys.setrecursionlimit(10**4)
 
 n = int(input())
-A = input() # 1 = 실내, 0 = 실외
 adj = dict()
 for i in range(1, n+1):
-    adj[i] = (list(), int(A[i-1]))
+    adj[i] = list()
+
+place = list("0" + input().strip())
     
 for _ in range(n-1):
-    u, v = map(int, input().split())
-    adj[u][0].append(v)
-    adj[v][0].append(u)
-    adj[u][0].sort()
-    adj[v][0].sort()
+    a, b = map(int, input().split())
+    adj[a].append(b)
+    adj[b].append(a)
 
-#for i in range(1, n+1):
-#    print(f"{i} : {adj[i]}")
+def dfs(i):
+    cnt = 0
+    visited[i] = True
+    for j in adj[i]:
+        if not visited[j]:
+            if place[j] == "1": # 실내에 도착하면 종료
+                cnt += 1
+            else:
+                cnt += dfs(j)
+    return cnt      
 
 answer = 0
-cnt = 0
 for i in range(1, n+1):
-    if adj[i][1] == 0:
+    if place[i] == "0":
         continue
-    
     visited = [False] * (n+1)
-    #print(f"{i}에서 시작")
-    dfs(i)
-    answer += 1
-    cnt += 1
+    for j in range(i):
+        if place[j] == "1":
+            visited[j] = True
+    if not visited[i]:
+        answer += dfs(i)
 
-print(answer - cnt)
+print(answer*2)
