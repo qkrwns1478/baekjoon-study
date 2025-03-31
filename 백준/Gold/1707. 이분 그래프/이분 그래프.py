@@ -10,21 +10,12 @@ for _ in range(k):
         a, b = map(int, input().split())
         adj[a].append(b)
         adj[b].append(a)
-
-    #for i in range(1, v+1):
-    #    print(f"{i} : {adj[i]}")
     
     def dfs(i, mode):
         visited[i] = mode
         for j in adj[i]:
             if visited[j] == -1:
                 dfs(j, (mode+1)%2)
-        '''print(visited[1:])
-        for j in adj[i]:
-            print(f"{i} ({visited[i]}) - {j} ({visited[j]})")
-           if visited[i] == visited[j]:
-                return False
-        return True'''
         
     visited = [-1] * (v+1)
     for i in range(1, v+1):
