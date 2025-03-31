@@ -4,32 +4,33 @@ import heapq
 
 v, e = map(int, input().split())
 k = int(input())
-dist= [float("inf")] * (v+1)
-visited = [False] * (v+1)
 arr = [[] for _ in range(v+1)]
-queue = list()
-
 for _ in range(e):
     a, b, c = map(int, input().split())
     arr[a].append((b, c))
 
-heapq.heappush(queue, (0, k))
-dist[k] = 0
+def dijkstra(arr, start):
+    D = [float("inf")] * (v+1)
+    D[start] = 0
+    queue = [(0, start)]
 
-while queue:
-    _, now = heapq.heappop(queue)
-    
-    if visited[now]:
-        continue
-    
-    visited[now] = True
-    for next, next_val in arr[now]:
-        if dist[next] > dist[now] + next_val:
-            dist[next] = dist[now] + next_val
-            heapq.heappush(queue, (dist[next], next))
-            
-for i in range(1, v+1):
-    if visited[i]:
-        print(dist[i])
-    else:
+    while queue:
+        now_dist, now_node = heapq.heappop(queue)
+
+        if now_dist > D[now_node]:
+            continue
+
+        for node, weight in arr[now_node]:
+            cost = now_dist + weight
+            if cost < D[node]:
+                D[node] = cost
+                heapq.heappush(queue, (cost, node))
+
+    return D[1:]
+
+result = dijkstra(arr, k)
+for i in result:
+    if i == float("inf"):
         print("INF")
+    else:
+        print(i)
