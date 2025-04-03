@@ -1,47 +1,34 @@
+# 이전에 백준에 제출한 기록이 있지만 다시 작성했습니다.
 import sys
 input = sys.stdin.readline
 sys.setrecursionlimit(10**6)
 
-def apt(x, y):
-    if visited[x][y]:
-        return 0
-    
-    visited[x][y] = True
-    result = 1 if arr[x][y] == 1 else 0
-
-    if arr[x][y] > 0:
-        if x > 0 and not visited[x-1][y]:
-            result+= apt(x-1, y)
-        if x < n-1 and not visited[x+1][y]:
-            result += apt(x+1, y)
-        if y < n-1 and not visited[x][y+1]:
-            result += apt(x, y+1)
-        if y > 0 and not visited[x][y-1]:
-            result += apt(x, y-1)
-            
-    return result
-
 n = int(input())
-arr = [[0 for _ in range(n)] for _ in range(n)]
+dx = [0, 1, 0, -1]
+dy = [1, 0, -1, 0]
+arr = [list(map(int, input().strip())) for _ in range(n)]
+visited = [[False] * n for _ in range(n)]
 
+def dfs(x, y):
+    global cnt
+    visited[x][y] = True
+    cnt += 1
+    for i in range(4):
+        nx = x + dx[i]
+        ny = y + dy[i]
+        if 0 <= nx <= n-1 and 0 <= ny <= n-1:
+            if not visited[nx][ny] and arr[nx][ny] == 1:
+                dfs(nx, ny)
+
+answer = 0
+result = list()
 for i in range(n):
-    s = input()
     for j in range(n):
-        arr[i][j] = int(s[j])
-
-cnt = 0
-answer = []
-visited = [[False for _ in range(n)] for _ in range(n)]
-
-for i in range(n):
-    for j in range(n):
-        if not visited[i][j] and arr[i][j] > 0:
-            danji = apt(i, j)
-            if danji > 0:
-                cnt += 1
-                answer.append(danji)
-            
-answer.sort()
-print(cnt)
-for i in answer:
-    print(i)
+        if not visited[i][j] and arr[i][j] == 1:
+            cnt = 0
+            dfs(i, j)
+            result.append(cnt)
+            answer += 1
+print(answer)
+result.sort()
+print(*result)
