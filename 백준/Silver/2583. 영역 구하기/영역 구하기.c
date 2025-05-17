@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
 #define LIMIT 100
 
 int dx[4] = {1, 0, -1, 0};
@@ -21,16 +23,8 @@ int dfs(int y, int x, int m, int n, int arr[][LIMIT]) {
     return cnt;
 }
 
-void sort(int *array, int size) {
-    for (int i = 0; i < size; i++) {
-        for (int j = i + 1; j < size; j++) {
-            if (array[i] > array[j]) {
-                int tmp = array[i];
-                array[i] = array[j];
-                array[j] = tmp;
-            }
-        }
-    }
+int compare(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
 }
 
 int main() {
@@ -40,10 +34,10 @@ int main() {
     for (int i = 0; i < k; i++) {
         int a, b, c, d;
         scanf("%d %d %d %d", &a, &b, &c, &d);
-        int sx = (a < c) ? a : c;
-        int ex = (a > c) ? a : c;
-        int sy = (b < d) ? b : d;
-        int ey = (b > d) ? b : d;
+        int sx = MIN(a, c);
+        int ex = MAX(a, c);
+        int sy = MIN(b, d);
+        int ey = MAX(b, d);
         for (int y = sy; y < ey; y++) {
             for (int x = sx; x < ex; x++) {
                 arr[y][x] = 1;
@@ -63,7 +57,7 @@ int main() {
         }
     }
 
-    sort(sizes, count);
+    qsort(sizes, count, sizeof(int), compare);
 
     printf("%d\n", count);
     for (int i = 0; i < count; i++) {
