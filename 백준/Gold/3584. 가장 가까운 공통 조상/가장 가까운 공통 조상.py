@@ -46,13 +46,5 @@ for _ in range(T):
     while cur.parent != None:
         parentsB.append(cur.parent)
         cur = cur.parent
-    '''
-    for i in range(len(parentsA)):
-        print(parentsA[i].value, end=' ')
-    print()
-    for i in range(len(parentsB)):
-        print(parentsB[i].value, end=' ')
-    print()
-    '''
     answer = test(parentsA, parentsB)
     print(answer.value)
