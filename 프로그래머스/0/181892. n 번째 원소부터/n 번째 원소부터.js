@@ -1,0 +1,1 @@
+const solution = (nums, n) => nums.slice(n-1);
