@@ -1,0 +1,1 @@
+const solution = (my_string, is_prefix) => Number(my_string.substring(0, is_prefix.length) == is_prefix);
