@@ -1,0 +1,1 @@
+const solution = (myStr) => myStr.toUpperCase();
