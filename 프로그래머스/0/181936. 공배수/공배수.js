@@ -1,0 +1,1 @@
+const solution = (number, n, m) => Number(number % n == 0 && number % m == 0);
