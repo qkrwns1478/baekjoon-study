@@ -1,52 +1,30 @@
-import sys
+N = int(input())
 
-def remove_queen(i, j):
-    for k in range(n):
-        board[i][k] -= 1
-        board[k][j] -= 1
-        if i + k < n and j + k < n:
-            board[i+k][j+k] -= 1
-        if i - k >= 0 and j - k >= 0:
-            board[i-k][j-k] -= 1
-        if i + k < n and j - k >= 0:
-            board[i+k][j-k] -= 1
-        if i - k >= 0 and j + k < n:
-            board[i-k][j+k] -= 1
-            
-def set_queen(i, j):
-    for k in range(n):
-        board[i][k] += 1
-        board[k][j] += 1
-        if i + k < n and j + k < n:
-            board[i+k][j+k] += 1
-        if i - k >= 0 and j - k >= 0:
-            board[i-k][j-k] += 1
-        if i + k < n and j - k >= 0:
-            board[i+k][j-k] += 1
-        if i - k >= 0 and j + k < n:
-            board[i-k][j+k] += 1
+def get_queen_range(x, y, flag=True):
+    f = 1 if flag else -1
+    for i in range(N):
+        arr[x][i] += f
+        arr[i][y] += f
+        if 0 <= x-i and 0 <= y-i: arr[x-i][y-i] += f
+        if x+i < N and y+i < N: arr[x+i][y+i] += f
+        if 0 <= x-i and y+i < N: arr[x-i][y+i] += f
+        if x+i < N and 0 <= y-i: arr[x+i][y-i] += f
 
-def queen(i, j):
-    global answer
+def dfs(x, y):
+    if arr[x][y] > 0:
+        return 0
+    if y == N-1 and arr[x][y] == 0:
+        return 1
 
-    if board[i][j] > 0:
-        return
-    
-    set_queen(i, j)
-    
-    if j+1 == n:
-        answer += 1
-        remove_queen(i, j)
-        return
+    res = 0
+    get_queen_range(x, y)
+    for i in range(N):
+        res += dfs(i, y+1)
+    get_queen_range(x, y, False)
+    return res
 
-    for k in range(n):
-        queen(k, j+1)
-        
-    remove_queen(i, j)
-            
-n = int(sys.stdin.readline())
-answer = 0
-board = [[0 for _ in range(n)] for _ in range(n)]
-for i in range(n):
-    queen(i, 0)
-print(answer)
+ans = 0
+arr = [[0] * N for _ in range(N)]
+for i in range(N):
+    ans += dfs(i, 0)
+print(ans)
