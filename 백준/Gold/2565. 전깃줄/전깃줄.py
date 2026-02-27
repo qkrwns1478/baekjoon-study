@@ -1,2 +1,5 @@
-import zlib as Z, codecs as C
-exec(Z.decompress(C.decode(b'eJxFjkEKwyAQRfeewqXTpgG3sS68gBcQKUKaMpKYQS30+NU2kL+Y+fz/GMZqTFVgoncVAMpot2KpYgvUwjocxVhoxQ7Asmf+4Jh4Dun1FBa8mkk76S9WmbHsuVGsQ3hCcrAwMd7Ui3gWeMRduHDjom+X7sZh39NMzegtfMTPDW1Gf5XAKPen7e1fAXwB3sM8qQ==','base64')))
+N=int(input());A=[list(map(int,input().split()))for _ in range(N)];dp=[1]*N;A.sort()
+for i in range(1,N):
+    for j in range(i):
+        if A[j][1]<A[i][1]:dp[i]=max(dp[i],dp[j]+1)
+print(N-max(dp))
