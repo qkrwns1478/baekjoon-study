@@ -1,0 +1,1 @@
+I=input;N,D=map(int,I().split());A=[int(I())for _ in range(N)];R=D//sum(A);print(*(a*R for a in A),sep='\n')
