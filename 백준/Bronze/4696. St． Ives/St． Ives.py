@@ -1,1 +1,4 @@
-import zlib as Z,codecs as C;exec(Z.decompress(C.decode(b'eJwrz8jMSVUwtOJSAII827Sc/MQSjcy8gtISDU1NsGBmmkJefolCnlVSUWpiNliooCgzr0RDSVXPKE1JVcNQO087TwuMYaRWnqYmAI6ZGSs=','base64')))
+while 1:
+ n=float(input())
+ if not n:break
+ print(f'{1+n+n**2+n**3+n**4:.2f}')
