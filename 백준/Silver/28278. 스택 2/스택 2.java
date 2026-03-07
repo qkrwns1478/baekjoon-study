@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
@@ -32,31 +30,33 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         int N = Integer.parseInt(br.readLine());
         while (N-- > 0) {
             String[] inputs = br.readLine().split(" ");
             int Q = Integer.parseInt(inputs[0]);
             switch (Q) {
                 case 1:
-                    int X = Integer.parseInt(inputs[1]);
-                    push(X);
+                    push(Integer.parseInt(inputs[1]));
                     break;
                 case 2:
-                    System.out.println(pop());
+                    bw.write(pop() +"\n");
                     break;
                 case 3:
-                    System.out.println(getSize());
+                    bw.write(getSize() +"\n");
                     break;
                 case 4:
-                    System.out.println(isEmpty());
+                    bw.write(isEmpty() +"\n");
                     break;
                 case 5:
-                    System.out.println(peek());
+                    bw.write(peek() +"\n");
                     break;
                 default:
                     break;
             }
         }
+        bw.flush();
+        bw.close();
         br.close();
     }
 }
