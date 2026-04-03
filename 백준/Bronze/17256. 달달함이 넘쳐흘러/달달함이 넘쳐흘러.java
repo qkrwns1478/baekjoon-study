@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -31,13 +30,10 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        int[] A = getNums();
-        int[] C = getNums();
-        Cake cakeA = new Cake(A);
-        Cake cakeC = new Cake(C);
-
-        Cake cakeB = new Cake(cakeC.x - cakeA.z, cakeC.y / cakeA.y, cakeC.z - cakeA.x);
-        bw.write(cakeB.x + " " + cakeB.y + " " + cakeB.z);
+        Cake A = new Cake(getNums());
+        Cake C = new Cake(getNums());
+        Cake B = new Cake(C.x - A.z, C.y / A.y, C.z - A.x);
+        bw.write(B.x + " " + B.y + " " + B.z);
 
         bw.flush();
         bw.close();
