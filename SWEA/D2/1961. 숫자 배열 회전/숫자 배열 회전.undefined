@@ -1,0 +1,61 @@
+import java.util.Scanner;
+
+class Solution
+{
+
+    private static int[][] rotate(int[][] arr) {
+        int n = arr.length;
+        int [][] res = new int[n][n];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                res[i][j] = arr[n-j-1][i];
+            }
+        }
+
+        return res;
+    }
+
+    public static void main(String args[]) throws Exception
+    {
+        Scanner sc = new Scanner(System.in);
+        int T;
+        T=sc.nextInt();
+
+        for(int test_case = 1; test_case <= T; test_case++)
+        {
+
+            /////////////////////////////////////////////////////////////////////////////////////////////
+            int N = sc.nextInt();
+            int[][] arr = new int[N][N];
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    arr[i][j] = sc.nextInt();
+                }
+            }
+
+            int[][] A = rotate(arr); // 90도 회전
+            int[][] B = rotate(A); // 180도 회전
+            int[][] C = rotate(B); // 270도 회전
+
+            System.out.println("#" + test_case);
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    System.out.print(A[i][j]);
+                }
+                System.out.print(" ");
+                for (int j = 0; j < N; j++) {
+                    System.out.print(B[i][j]);
+                }
+                System.out.print(" ");
+                for (int j = 0; j < N; j++) {
+                    System.out.print(C[i][j]);
+                }
+                System.out.println();
+            }
+
+            /////////////////////////////////////////////////////////////////////////////////////////////
+
+        }
+    }
+}
