@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 class State {
@@ -8,6 +9,14 @@ class State {
 		this.by = by;
 		this.rx = rx;
 		this.ry = ry;
+		this.cnt = cnt;
+	}
+	
+	public State(Marble blue, Marble red, int cnt) {
+		this.bx = blue.x;
+		this.by = blue.y;
+		this.rx = red.x;
+		this.ry = red.y;
 		this.cnt = cnt;
 	}
 }
@@ -36,15 +45,15 @@ public class Main {
 	static int sbx, sby, srx, sry, hx, hy;
 	static boolean[][] isBlocked;
 	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		N = sc.nextInt();
-		M = sc.nextInt();
-		sc.nextLine();
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 		
 		isBlocked = new boolean[N][M];
 		for (int i = 0; i < N; i++) {
-			String s = sc.nextLine();
+			String s = br.readLine();
 			for (int j = 0; j < M; j++) {
 				char c = s.charAt(j);
 				if (c == '.') continue;
@@ -56,19 +65,37 @@ public class Main {
 		}
 		
 		System.out.println(bfs());
-		sc.close();
+		br.close();
 	}
 	
 	static boolean isInRange(int x, int y) {
 		return 0 <= x && x < N && 0 <= y && y < M;
 	}
 	
-	static String getStringCoord(int bx, int by, int rx, int ry) {
-		return String.format("%d,%d,%d,%d", bx, by, rx, ry);
+	static boolean isInHole(Marble m) {
+		return m.x == hx && m.y == hy;
 	}
 	
 	static String getStringCoord(State s) {
-		return getStringCoord(s.bx, s.by, s.rx, s.ry);
+		return String.format("%d,%d,%d,%d", s.bx, s.by, s.rx, s.ry);
+	}
+	
+	static int[] dx = {1, 0, -1, 0};
+	static int[] dy = {0, 1, 0, -1};
+	
+	static void move(Marble m, int d, int ax, int ay) {
+		if (isInHole(m)) return;
+		
+		int nx, ny;
+		while (true) {
+			nx = m.x + dx[d];
+			ny = m.y + dy[d];
+			if (isBlocked[nx][ny]) break;
+			if (nx == ax && ny == ay) break;
+			m.x = nx;
+			m.y = ny;
+			if (isInHole(m)) break;
+		}
 	}
 	
 	static MoveDTO move(State cur, int d) {
@@ -96,80 +123,34 @@ public class Main {
 		int ay = isInHole(first) ? -1 : first.y;
 		move(second, d, ax, ay);
 		
-		return new MoveDTO(!isInHole(blue), new State(blue.x, blue.y, red.x, red.y, cur.cnt+1));
-	}
-	
-	static int[] dx = {1, 0, -1, 0};
-	static int[] dy = {0, 1, 0, -1};
-	
-	static void move(Marble m, int d, int ax, int ay) {
-		if (isInHole(m)) return;
-		
-		int nx, ny;
-		while (true) {
-			nx = m.x + dx[d];
-			ny = m.y + dy[d];
-			if (isBlocked[nx][ny]) break;
-			if (nx == ax && ny == ay) break;
-			m.x = nx;
-			m.y = ny;
-			if (isInHole(m)) break;
-		}
-	}
-	
-	static boolean isInHole(Marble m) {
-		return m.x == hx && m.y == hy;
+		return new MoveDTO(!isInHole(blue), new State(blue, red, cur.cnt+1));
 	}
 	
 	static int bfs() {
 		int res = Integer.MAX_VALUE;
 		Queue<State> queue = new ArrayDeque<>();
 		HashSet<String> visited = new HashSet<>();
-		queue.add(new State(sbx, sby, srx, sry, 0));
-		visited.add(getStringCoord(sbx, sby, srx, sry));
+		
+		State start = new State(sbx, sby, srx, sry, 0);
+		queue.add(start);
+		visited.add(getStringCoord(start));
 		
 		while (!queue.isEmpty()) {
 			State cur = queue.poll();
-			if (cur.rx == hx && cur.ry == hy) {
-//				res = Math.min(res, cur.cnt);
-//				continue;
+			if (cur.rx == hx && cur.ry == hy)
 				return cur.cnt;
-			}
 			
 			if (cur.cnt == 10) continue;
-			
-			/*
-			for (int i = 0; i < 4; i++) {
-				int nbx = cur.bx + dx[i];
-				int nby = cur.by + dy[i];
-				if (!isInRange(nbx, nby)) continue;
-				if (isBlocked[nbx][nby]) continue;
-				// 파란 구슬은 구멍에 들어가면 안됨
-				if (nbx == hx && nby == hy) continue;
-				
-				for (int j = 0; j < 4; j++) {
-					int nrx = cur.rx + dx[j];
-					int nry = cur.ry + dy[j];
-					if (!isInRange(nrx, nry)) continue;
-					String nxtCoord = getStringCoord(nbx, nby, nrx, nry);
-					if (visited.contains(nxtCoord))
-					if (isBlocked[nrx][nry]) continue;
-					
-					visited.add(nxtCoord);
-					queue.add(new State(nbx, nby, nrx, nry, cur.cnt+1));
-				}
-			}
-			*/
 			
 			for (int i = 0; i < 4; i++) {
 				MoveDTO nxt = move(cur, i);
 				if (!nxt.isValid) continue;
 				String nxtCoord = getStringCoord(nxt.state);
 				if (visited.contains(nxtCoord)) continue;
+				
 				visited.add(nxtCoord);
 				queue.add(nxt.state);
 			}
-			
 		}
 		
 		return res != Integer.MAX_VALUE ? res : -1;
